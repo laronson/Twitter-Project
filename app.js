@@ -99,7 +99,7 @@ app.get('/stream', loginRequired, function (req, res) {
   done= false
 
   req.api.stream('statuses/filter').post({
-    track: ['love'], locations: [-180,-90,180,90]
+    locations: [-180,-90,180,90]
   }, function (err, stream) {
     console.log("a");
     carrier.carry(stream, function (line) {
@@ -115,7 +115,7 @@ app.get('/stream', loginRequired, function (req, res) {
           tweet = [line.text, line.coordinates.coordinates[0], line.coordinates.coordinates[1]];
           tweets.push(tweet);
         }
-        if (tweets.length == 20){
+        if (tweets.length == 10){
           done = true;
           console.log("done")
           console.log(tweets)
@@ -130,4 +130,4 @@ app.get('/stream', loginRequired, function (req, res) {
   });
 })
 
-//, locations: [-180,-90,180,90]
+//, 
