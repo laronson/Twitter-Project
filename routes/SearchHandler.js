@@ -4,5 +4,5 @@
 
 
 exports.search = function(req, res){
-	res.render('index', { title: 'Search'})
+	res.render('search', { title: 'Search'})
 }

@@ -1,0 +1,11 @@
+extends layout
+
+block content
+  h1 HEEEEEYYYYY
+  p Welcome to #{title}
+
+
+  form(name='input', action='html_form_action.asp', method='post')
+    | Username:
+      input(type='text', name='user')
+      input(type='submit', value='Submit')
