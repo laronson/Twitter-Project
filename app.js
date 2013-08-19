@@ -104,7 +104,11 @@ app.get('/stream', loginRequired, function (req, res) {
   done= false
 
   req.api.stream('statuses/filter').post({
+<<<<<<< HEAD
     track: [searchword], locations: [-180,-90,180,90]
+=======
+    locations: [-180,-90,180,90]
+>>>>>>> ef5372cf81bb6ad16040b5cf7e9135dd1287925b
   }, function (err, stream) {
     console.log("a");
     carrier.carry(stream, function (line) {
@@ -120,7 +124,7 @@ app.get('/stream', loginRequired, function (req, res) {
           tweet = [line.text, line.coordinates.coordinates[0], line.coordinates.coordinates[1]];
           tweets.push(tweet);
         }
-        if (tweets.length == 20){
+        if (tweets.length == 10){
           done = true;
           console.log("done")
           console.log(tweets)
@@ -135,4 +139,4 @@ app.get('/stream', loginRequired, function (req, res) {
   });
 })
 
-//, locations: [-180,-90,180,90]
+//, 
