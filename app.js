@@ -1,7 +1,8 @@
 // npm install express rem
 var rem = require('rem')
   , express = require('express')
-  , path = require('path');
+  , path = require('path')
+  , searchword;
 var SearchHandler = require('./routes/SearchHandler');
 /**
  * Express.
@@ -37,7 +38,11 @@ app.configure('production', function () {
  * Setup Twitter.
  */
 app.get('/search', SearchHandler.search)
-app.post('/search', SearchHandler.buttonget)
+app.post('/search', function(req,res){
+  SearchHandler.buttonget(req,res);
+  searchword = req.body.user
+})
+
 
 
 var twitter = rem.connect('twitter.com').configure({
@@ -99,7 +104,7 @@ app.get('/stream', loginRequired, function (req, res) {
   done= false
 
   req.api.stream('statuses/filter').post({
-    track: ['love'], locations: [-180,-90,180,90]
+    track: [searchword], locations: [-180,-90,180,90]
   }, function (err, stream) {
     console.log("a");
     carrier.carry(stream, function (line) {
