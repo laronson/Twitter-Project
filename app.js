@@ -52,7 +52,7 @@ app.get('/login/', oauth.login());
 
 app.use(oauth.middleware(function (req, res, next) {
   console.log("The user is now authenticated.");
-  res.redirect('/stream');
+  res.redirect('/');
 }));
 
 app.get('/logout/', oauth.logout(function (req, res) {
@@ -79,7 +79,7 @@ function loginRequired (req, res, next) {
 
 app.get('/', loginRequired, function (req, res) {
   req.api('account/verify_credentials').get(function (err, profile) {
-    res.send("good")
+    res.redirect('/search');
   });
 });
 
