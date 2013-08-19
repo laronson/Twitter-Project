@@ -2,7 +2,7 @@
 var rem = require('rem')
   , express = require('express')
   , path = require('path');
-
+var SearchHandler = require('./routes/SearchHandler');
 /**
  * Express.
  */
@@ -36,6 +36,9 @@ app.configure('production', function () {
 /**
  * Setup Twitter.
  */
+app.get('/search', SearchHandler.search)
+app.post('/search', SearchHandler.buttonget)
+
 
 var twitter = rem.connect('twitter.com').configure({
   key: process.env.TWITTER_KEY,
@@ -74,27 +77,6 @@ function loginRequired (req, res, next) {
   }
 }
 
-function uniqueSubSet(elements,set){
-  var subSet = [];
-  for (var i = 0; i < elements; i++){
-    var element = randomChoice(set);
-    while (subSet.indexOf(element) > -1){
-      element = randomChoice(set);
-    }
-    subSet.push(element)
-  }
-  return subSet;
-}
-
-function randomChoice(list){
-  var index = randInt(0,list.length-1);
-  return list[index];
-}
-
-function randInt(min,max){
-  return Math.floor(Math.random()*(max - min + 1))+min;
-}
-
 app.get('/', loginRequired, function (req, res) {
   req.api('account/verify_credentials').get(function (err, profile) {
     res.send("good")
@@ -122,8 +104,8 @@ app.get('/stream', loginRequired, function (req, res) {
     console.log("a");
     carrier.carry(stream, function (line) {
       if (!done){
-
-
+        num++
+        console.log(num)
         var line = JSON.parse(line);
         // console.log(line)
         if (line.coordinates != null ){
@@ -138,11 +120,12 @@ app.get('/stream', loginRequired, function (req, res) {
           console.log("done")
           console.log(tweets)
           console.log(tweets[0])
+          console.log("a")
+          res.send(tweets);
+          console.log("b")
 
-          // res.write(tweets);
         }
       }
-      res.send("hi")
     });
   });
 })
