@@ -1,7 +1,8 @@
 // npm install express rem
 var rem = require('rem')
   , express = require('express')
-  , path = require('path');
+  , path = require('path')
+  , searchword;
 var SearchHandler = require('./routes/SearchHandler');
 /**
  * Express.
@@ -124,8 +125,45 @@ num = 0;
 done= false
 
 
+<<<<<<< HEAD
 app.get('/stream', loginRequired, function (req, res) {
   res.send(tweets.splice(1,20))
+=======
+  req.api.stream('statuses/filter').post({
+<<<<<<< HEAD
+    track: [searchword], locations: [-180,-90,180,90]
+=======
+    locations: [-180,-90,180,90]
+>>>>>>> ef5372cf81bb6ad16040b5cf7e9135dd1287925b
+  }, function (err, stream) {
+    console.log("a");
+    carrier.carry(stream, function (line) {
+      if (!done){
+        num++
+        console.log(num)
+        var line = JSON.parse(line);
+        // console.log(line)
+        if (line.coordinates != null ){
+          console.log(line.coordinates);
+          console.log("Yes")
+          // res.write(line.coordinates.coordinates + '\n');
+          tweet = [line.text, line.coordinates.coordinates[0], line.coordinates.coordinates[1]];
+          tweets.push(tweet);
+        }
+        if (tweets.length == 10){
+          done = true;
+          console.log("done")
+          console.log(tweets)
+          console.log(tweets[0])
+          console.log("a")
+          res.send(tweets);
+          console.log("b")
+
+        }
+      }
+    });
+  });
+>>>>>>> cdb58721529e891d51b1ce86eb059d8396f6ef9a
 })
 
 //, 
