@@ -36,7 +36,33 @@ app.configure('production', function () {
 /**
  * Setup Twitter.
  */
-app.get('/search', SearchHandler.search)
+app.get('/search', function(req,res){
+  
+  req.api.stream('statuses/filter').post({
+    locations: [-180,-90,180,90]
+  }, function (err, stream) {
+    console.log("a");
+    carrier.carry(stream, function (line) {
+      if (!done){
+        num++
+        console.log(num)
+        var line = JSON.parse(line);
+        // console.log(line)
+        if (line.coordinates != null ){
+          console.log(line.coordinates);
+          console.log("Yes")
+          // res.write(line.coordinates.coordinates + '\n');
+          tweet = [line.text, line.coordinates.coordinates[0], line.coordinates.coordinates[1]];
+          tweets.push(tweet);
+        }
+        if (tweets.length < 40){
+          tweets = tweets.splice(1, tweets.length +1)
+        }
+      }
+    });
+  });
+  SearchHandler.search(req,res)
+})
 app.post('/search', SearchHandler.buttonget)
 
 
@@ -62,6 +88,7 @@ app.get('/logout/', oauth.logout(function (req, res) {
 // Save the user session as req.user.
 app.all('/*', function (req, res, next) {
   req.api = oauth.session(req);
+
   next();
 });
 
@@ -92,42 +119,13 @@ app.listen(app.get('port'), function () {
  * Streaming example
  */
 var carrier = require('carrier');
+tweets = [];
+num = 0;
+done= false
+
 
 app.get('/stream', loginRequired, function (req, res) {
-  tweets = [];
-  num = 0;
-  done= false
-
-  req.api.stream('statuses/filter').post({
-    locations: [-180,-90,180,90]
-  }, function (err, stream) {
-    console.log("a");
-    carrier.carry(stream, function (line) {
-      if (!done){
-        num++
-        console.log(num)
-        var line = JSON.parse(line);
-        // console.log(line)
-        if (line.coordinates != null ){
-          console.log(line.coordinates);
-          console.log("Yes")
-          // res.write(line.coordinates.coordinates + '\n');
-          tweet = [line.text, line.coordinates.coordinates[0], line.coordinates.coordinates[1]];
-          tweets.push(tweet);
-        }
-        if (tweets.length == 10){
-          done = true;
-          console.log("done")
-          console.log(tweets)
-          console.log(tweets[0])
-          console.log("a")
-          res.send(tweets);
-          console.log("b")
-
-        }
-      }
-    });
-  });
+  res.send(tweets.splice(1,20))
 })
 
 //, 

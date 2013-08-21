@@ -30,9 +30,8 @@ $(function(){
             }
             console.log("END OF FOR LOOP")
 
-            
+            reload()            
         })
-        window.setTimeout(reload,2000 );
     }
     $(document).ready(function () {
         initialize = function(){
@@ -44,7 +43,8 @@ $(function(){
             };
             map = new google.maps.Map(document.getElementById("map-canvas"),
             mapOptions);
-            window.setTimeout(reload,2000 );
+            // window.setTimeout(reload,2000 );
+            reload()
                 
 
         }
